@@ -119,6 +119,7 @@ curl -X POST http://localhost:4000/api/chat \
 ```
 
 Notes:
+
 - Only specific file types are allowed: PDF, DOC, DOCX, XLS, XLSX, TXT, CSV, JSON, PNG, JPG
 - Maximum file size is 5 MB per file
 - Maximum 3 files per request
@@ -127,7 +128,6 @@ Notes:
 
 ```bash
 curl -X POST http://localhost:4000/api/request-demo \
-  -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Jane Doe",
@@ -181,10 +181,10 @@ This backend can be deployed to any Node.js hosting platform, such as:
 ### Example deployment checklist
 
 1. Set environment variables in the deployment dashboard:
+
    - `PORT`
    - `JWT_SECRET`
    - `CORS_ORIGIN`
-
 2. Run install step in the deployment environment:
 
 ```bash

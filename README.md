@@ -45,6 +45,8 @@ cp .env.example .env
 PORT=4000
 JWT_SECRET=your-super-secure-random-string
 CORS_ORIGIN=http://localhost:5173
+RAG_API_BASE_URL=http://localhost:8001
+RAG_TOP_K=1
 ```
 
 ## Run in Development Mode
@@ -109,12 +111,13 @@ curl -X POST http://localhost:4000/api/auth/logout \
   -H "Authorization: Bearer <token>"
 ```
 
-### Chat with File Upload
+### Chat with RAG + File Upload
 
 ```bash
 curl -X POST http://localhost:4000/api/chat \
   -H "Authorization: Bearer <token>" \
   -F "message=Hello, can you review my document?" \
+  -F "topK=1" \
   -F "files=@/path/to/file.pdf"
 ```
 
@@ -123,6 +126,8 @@ Notes:
 - Only specific file types are allowed: PDF, DOC, DOCX, XLS, XLSX, TXT, CSV, JSON, PNG, JPG
 - Maximum file size is 5 MB per file
 - Maximum 3 files per request
+- `message` is required and is sent to the RAG service at `${RAG_API_BASE_URL}/api/v1/query`
+- `topK` is optional and defaults to `RAG_TOP_K`
 
 ### Request Demo
 

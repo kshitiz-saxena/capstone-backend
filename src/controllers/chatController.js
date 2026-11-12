@@ -1,20 +1,25 @@
-const { createChatPayload } = require('../services/chatService');
+const { createChatPayloadFromRag, queryRagPipeline } = require('../services/chatService');
 
 async function processChat(req, res, next) {
   try {
-    const { message = '', conversationId } = req.body;
+    const { message = '', conversationId, topK } = req.body;
 
-    const payload = createChatPayload({
+    const ragResponse = await queryRagPipeline({ query: message, topK });
+    const payload = createChatPayloadFromRag({
       userId: req.user.sub,
-      message,
       conversationId,
       files: req.files || [],
+      fallbackMessage: message,
+      ragResponse,
     });
 
     return res.status(200).json({
       success: true,
-      message: 'Chat request processed successfully',
-      data: payload,
+      message: 'Chat response generated successfully',
+      data: {
+        ...payload,
+        ragResponse,
+      },
     });
   } catch (error) {
     return next(error);

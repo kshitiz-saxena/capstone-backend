@@ -8,8 +8,7 @@ async function requestDemo(req, res, next) {
       name,
       email,
       company,
-      message,
-      requestedBy: req.user.sub,
+      message
     });
 
     return res.status(201).json({

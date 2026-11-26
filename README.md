@@ -45,6 +45,8 @@ cp .env.example .env
 PORT=4000
 JWT_SECRET=your-super-secure-random-string
 CORS_ORIGIN=http://localhost:5173
+GOOGLE_CLIENT_ID=your-google-oauth-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-google-oauth-client-secret
 RAG_API_BASE_URL=http://localhost:8001
 RAG_TOP_K=1
 ```
@@ -96,6 +98,22 @@ curl -X POST http://localhost:4000/api/auth/login \
     "password": "Demo@123"
   }'
 ```
+
+#### Google Login
+
+The Google Identity Services frontend should send the authorization `code`:
+
+```bash
+curl -X POST http://localhost:4000/api/auth/google-login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "<google-authorization-code>"
+  }'
+```
+
+No frontend redirect URI is required. The backend uses Google's `postmessage` exchange
+mode for popup authorization-code flows. The verified Google email must match an
+email in the backend `demoUsers` allowlist.
 
 #### Get Current User
 

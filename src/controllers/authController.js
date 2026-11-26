@@ -1,6 +1,11 @@
 const { signToken } = require('../lib/jwt');
 const { AppError } = require('../lib/errors');
-const { verifyCredentials, getUserById, serializeUser } = require('../services/authService');
+const {
+  verifyCredentials,
+  verifyGoogleAuthorizationCode,
+  getUserById,
+  serializeUser,
+} = require('../services/authService');
 
 async function login(req, res, next) {
   try {
@@ -16,6 +21,24 @@ async function login(req, res, next) {
     return res.status(200).json({
       success: true,
       message: 'Login successful',
+      data: {
+        user: serializeUser(user),
+        token,
+      },
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function googleLogin(req, res, next) {
+  try {
+    const user = await verifyGoogleAuthorizationCode(req.body.code);
+    const token = signToken({ sub: user.id, email: user.email, name: user.name });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Google login successful',
       data: {
         user: serializeUser(user),
         token,
@@ -50,6 +73,7 @@ function getMe(req, res) {
 
 module.exports = {
   login,
+  googleLogin,
   logout,
   getMe,
 };

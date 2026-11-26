@@ -11,11 +11,16 @@ const loginValidator = [
     .withMessage('Password must contain at least one number'),
 ];
 
+const googleLoginValidator = [
+  body('code').isString().trim().notEmpty().withMessage('Google authorization code is required'),
+];
+
 const logoutValidator = [
   header('authorization').optional().matches(/^Bearer\s.+$/).withMessage('Authorization header must be in Bearer token format'),
 ];
 
 module.exports = {
   loginValidator,
+  googleLoginValidator,
   logoutValidator,
 };
